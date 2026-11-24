@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kedai Ummi — Figma Import Board</title>
+<style>
+  /* ============================================================
+     KEDAI UMMI — FIGMA IMPORT BOARD
+     Frame: 412 × 915 (Android)
+     Semua warna/ukuran mengikuti AppColors, AppRadii, AppMotion.
+     ============================================================ */
+  @font-face { font-family: 'Poppins'; src: url('../assets/fonts/Poppins-Regular.ttf'); font-weight: 400; font-style: normal; }
+  @font-face { font-family: 'Poppins'; src: url('../assets/fonts/Poppins-Medium.ttf'); font-weight: 500; font-style: normal; }
+  @font-face { font-family: 'Poppins'; src: url('../assets/fonts/Poppins-SemiBold.ttf'); font-weight: 600; font-style: normal; }
+  @font-face { font-family: 'Poppins'; src: url('../assets/fonts/Poppins-Bold.ttf'); font-weight: 700; font-style: normal; }
+  @font-face { font-family: 'Poppins'; src: url('../assets/fonts/Poppins-ExtraBold.ttf'); font-weight: 800; font-style: normal; }
+  @font-face { font-family: 'Pacifico'; src: url('../assets/fonts/Pacifico-Regular.ttf'); font-weight: 400; font-style: normal; }
+
+  :root {
+    --terracotta: #A65D3F;
+    --terracotta-dark: #85452F;
+    --terracotta-soft: #F7E7D8;
+    --gold: #D6A66A;
+    --gold-light: #F3D89B;
+    --espresso: #2A1B13;
+    --chocolate: #321409;
+    --brown: #38251D;
+    --brown-soft: #6B5445;
+    --muted: #9B8574;
+    --cream: #FFF8EF;
+    --cream-deep: #F2E5D5;
+    --beige: #E8D8C8;
+    --beige-soft: #FBF0E3;
+    --surface: #FFFCF7;
+    --ivory: #FFF9F1;
+    --champagne: #F4D2AE;
+    --border: #EADCCB;
+    --border-strong: #DCC7B2;
+    --danger: #B24438;
+    --success: #37735A;
+    --field-bg: #FFFBF4;
+    --radius-field: 16px;
+    --radius-button: 20px;
+    --radius-card: 24px;
+    --radius-login: 30px;
+    --radius-sheet: 32px;
+    --shadow-card: 0 10px 22px rgba(56, 37, 29, .08);
+    --shadow-float: 0 16px 34px rgba(56, 37, 29, .14), 0 3px 8px rgba(56, 37, 29, .06);
+    --shadow-button: 0 8px 18px rgba(166, 93, 63, .28), 0 16px 30px rgba(56, 37, 29, .14);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #171310;
+    color: #EDE4DA;
+    font-family: 'Poppins', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Board shell ---------- */
+  .board { padding: 46px 40px 54px; }
+  .board-head {
+    width: 1324px;
+    margin: 0 auto 32px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .board-kicker {
+    font-size: 10px; font-weight: 800; letter-spacing: 2.4px;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .board-title { font-size: 30px; font-weight: 800; letter-spacing: -0.8px; color: #FFF6E8; }
+  .board-sub { margin-top: 6px; font-size: 12px; color: #A18F80; line-height: 1.6; }
+  .board-badge {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 13px; border-radius: 999px;
+    border: 1px solid rgba(214, 166, 106, .32);
+    background: rgba(214, 166, 106, .08);
+    color: #E9D5BC; font-size: 10.5px; font-weight: 600;
+    white-space: nowrap;
+  }
+  .board-badge i { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); display: block; }
+
+  .grid {
+    width: 1324px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 412px);
+    gap: 44px 36px; justify-content: center;
+  }
+  .cell { position: relative; }
+  .meta { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; font-size: 11px; }
+  .meta .num { color: var(--gold); font-weight: 800; letter-spacing: 1px; font-size: 10px; }
+  .meta .name { color: #F3E7D9; font-weight: 700; }
+  .meta .size { margin-left: auto; color: #8E7C6E; font-size: 9.5px; letter-spacing: .4px; }
+
+  .phone {
+    width: 412px; height: 915px;
+    position: relative; overflow: hidden;
+    background: var(--cream);
+    color: var(--brown);
+    box-shadow: 0 28px 70px rgba(0, 0, 0, .5);
+    font-size: 14px;
+  }
+
+  /* ---------- utilities ---------- */
+  .abs { position: absolute; }
+  .row { display: flex; align-items: center; }
+  .col { display: flex; flex-direction: column; }
+  .icon { display: block; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .icon--sm { width: 14px; height: 14px; stroke-width: 2.6; }
+  .icon--xs { width: 11px; height: 11px; stroke-width: 2.8; }
+  .hat { display: block; }
+  .glow { position: absolute; border-radius: 50%; pointer-events: none; }
+
+  /* ---------- brand ---------- */
+  .brand { --hat: 62px; --k: 38px; --u: 72px; display: flex; flex-direction: column; align-items: center; position: relative; }
+  .brand .hat { width: var(--hat); height: var(--hat); margin-bottom: -1px; filter: drop-shadow(0 5px 7px rgba(42, 27, 19, .38)); }
+  .brand .script { font-family: 'Pacifico', cursive; line-height: 1.02; text-align: center; letter-spacing: -1px; }
+  .brand .script span { display: block; background: linear-gradient(180deg, #FFFDF7 0%, #F9E5C4 62%, #E8C18C 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-stroke: 1.4px #5B3828; }
+  .brand .script .k { font-size: var(--k); }
+  .brand .script .u { font-size: var(--u); margin-top: -2px; letter-spacing: -2px; }
+  .brand--sm { --hat: 27px; --k: 16px; --u: 30px; }
+  .brand--sm .script { line-height: .95; letter-spacing: -.2px; }
+  .brand--sm .script .u { margin-top: -9px; }
+  .brand--login { --hat: 44px; --k: 27px; --u: 50px; }
+  .brand--login .script .u { margin-top: -8px; }
+
+  .tagline-row { display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .tagline-row i { display: block; width: 18px; height: 1px; background: rgba(214, 166, 106, .55); }
+  .tagline-row span { font-size: 12px; font-style: italic; font-weight: 500; color: #F1DEC7; letter-spacing: .2px; }
+
+  /* ---------- buttons & fields ---------- */
+  .btn {
+    height: 54px; border-radius: var(--radius-button);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14.5px; font-weight: 800; letter-spacing: .1px;
+    position: relative; overflow: hidden;
+  }
+  .btn--primary {
+    background: linear-gradient(180deg, #B96D43 0%, #A65D3F 46%, #85452F 100%);
+    color: #fff; box-shadow: var(--shadow-button);
+  }
+  .btn--primary::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 28px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, 0));
+  }
+  .btn .arrow-circle {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #FFF4E6; color: var(--terracotta-dark);
+    display: flex; align-items: center; justify-content: center;
+    margin-left: 9px; position: relative; z-index: 1;
+  }
+  .btn--secondary {
+    background: var(--surface); color: var(--brown);
+    border: 1px solid #F0E2D2; height: 52px;
+    font-weight: 700; font-size: 14px; gap: 9px;
+    box-shadow: 0 6px 14px rgba(56, 37, 29, .06);
+  }
+  .label { font-size: 12px; font-weight: 700; letter-spacing: .2px; color: var(--brown-soft); margin-bottom: 7px; }
+  .field {
+    height: 56px; border-radius: var(--radius-field);
+    background: var(--field-bg); border: 1px solid var(--beige);
+    display: flex; align-items: center; padding: 0 15px;
+    color: #A38F80; font-size: 13.5px; font-weight: 500;
+    box-shadow: 0 3px 10px rgba(56, 37, 29, .05);
+  }
+  .field .icon { margin-right: 11px; color: var(--muted); flex: 0 0 auto; }
+  .field--focus { border: 1.5px solid var(--terracotta); box-shadow: 0 6px 18px rgba(166, 93, 63, .16); }
+  .field__eye { margin-left: auto; color: var(--muted); display: flex; }
+  .divider-label { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; font-weight: 600; }
+  .divider-label::before, .divider-label::after { content: ''; height: 1px; flex: 1; background: var(--border); }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 6px 10px; border-radius: 999px;
+    font-size: 8.5px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase;
+  }
+  .pill--glass { background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .24); color: #F6E7D2; }
+  .pill--gold { background: var(--gold); color: var(--espresso); letter-spacing: .2px; text-transform: none; font-size: 8.5px; padding: 4px 8px; }
+
+  /* ---------- splash ---------- */
+  .splash { background: var(--chocolate); color: #fff; }
+  .splash-photo {
+    position: absolute; top: -54px; left: -70px; width: 552px; height: 660px;
+    object-fit: cover; filter: blur(14px) saturate(.95); opacity: .78; transform: scale(1.06);
+  }
+  .splash-shade {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(18, 8, 4, .9) 0%, rgba(18, 8, 4, .55) 42%, rgba(21, 11, 5, .97) 100%);
+  }
+  .splash-glow-a { top: -84px; right: -86px; width: 330px; height: 330px; background: radial-gradient(circle, rgba(214, 166, 106, .28), rgba(214, 166, 106, 0) 70%); }
+  .splash-glow-b { bottom: -86px; left: -100px; width: 320px; height: 320px; background: radial-gradient(circle, rgba(166, 93, 63, .26), rgba(166, 93, 63, 0) 70%); }
+  .splash-content { position: absolute; inset: 0; }
+  .splash-brand { left: 50%; top: 88px; transform: translateX(-50%); }
+  .splash-tagline { left: 50%; top: 270px; transform: translateX(-50%); white-space: nowrap; }
+  .food-plate {
+    position: absolute; overflow: hidden; border-radius: 50%;
+    box-shadow: 0 18px 30px rgba(20, 10, 4, .5);
+    border: 1px solid rgba(244, 210, 174, .3);
+  }
+  .food-plate img { width: 100%; height: 100%; object-fit: cover; }
+  .food-plate::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    box-shadow: inset 0 0 36px 19px #150b05;
+  }
+  .splash-plate { left: 50%; top: 306px; width: 276px; height: 171px; transform: translateX(-50%); }
+  .drink-float {
+    position: absolute; width: 78px; height: 78px; border-radius: 50%;
+    overflow: hidden; box-shadow: 0 12px 24px rgba(20, 10, 4, .45);
+    opacity: .8;
+  }
+  .drink-float img { width: 100%; height: 100%; object-fit: cover; }
+  .splash-drink { right: 16px; top: 330px; width: 70px; height: 70px; }
+  .loader {
+    position: absolute; left: 50%; bottom: 168px; transform: translateX(-50%);
+    width: 58px; height: 58px; border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, .16);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 24px rgba(214, 166, 106, .18);
+  }
+  .loader::before {
+    content: ''; position: absolute; inset: 4px; border-radius: 50%;
+    border: 2.4px solid transparent; border-top-color: var(--gold-light);
+    border-right-color: var(--gold-light); transform: rotate(38deg);
+  }
+  .loader .hat { width: 18px; height: 18px; }
+  .splash-status {
+    position: absolute; left: 0; right: 0; bottom: 126px;
+    text-align: center; font-size: 12.5px; font-weight: 500; color: rgba(255, 255, 255, .74);
+  }
+  .splash-footer {
+    position: absolute; left: 0; right: 0; bottom: 28px;
+    text-align: center; font-size: 8.5px; font-weight: 700; letter-spacing: 1.8px;
+    color: rgba(255, 255, 255, .34);
+  }
+  .particle { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: var(--gold-light); opacity: .6; }
+  .leaf { position: absolute; width: 26px; height: 44px; opacity: .22; }
+
+  /* ---------- onboarding ---------- */
+  .onboard { background: var(--cream); display: flex; flex-direction: column; }
+  .ob-glow-a { top: -120px; right: -90px; width: 330px; height: 330px; background: radial-gradient(circle, rgba(214, 166, 106, .22), rgba(214, 166, 106, 0) 70%); }
+  .ob-glow-b { bottom: 40px; left: -120px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(166, 93, 63, .12), rgba(166, 93, 63, 0) 70%); }
+  .ob-header { height: 54px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 2; }
+  .ob-skip { font-size: 12.5px; font-weight: 700; color: var(--brown-soft); }
+  .ob-visual { height: 486px; position: relative; margin-top: 2px; }
+  .ob-copy { padding: 18px 32px 0; text-align: center; position: relative; z-index: 2; }
+  .eyebrow { font-size: 9.5px; font-weight: 800; letter-spacing: 1.8px; color: var(--terracotta); text-transform: uppercase; }
+  .ob-title { margin-top: 8px; font-size: 27px; line-height: 1.12; font-weight: 800; letter-spacing: -0.7px; color: var(--brown); }
+  .ob-desc { margin: 8px auto 0; max-width: 330px; font-size: 13px; line-height: 1.5; font-weight: 500; color: var(--brown-soft); }
+  .ob-footer { margin-top: auto; padding: 0 24px 22px; position: relative; z-index: 2; }
+  .dots { display: flex; justify-content: center; gap: 7px; margin-bottom: 18px; }
+  .dots i { width: 8px; height: 8px; border-radius: 999px; background: var(--border-strong); display: block; }
+  .dots i.on { width: 26px; background: var(--terracotta); box-shadow: 0 3px 8px rgba(166, 93, 63, .3); }
+
+  .hero-food {
+    position: absolute; left: 22px; top: 8px; width: 368px; height: 452px;
+    border-radius: 34px; overflow: hidden; box-shadow: var(--shadow-float);
+  }
+  .hero-food img.hero-photo { width: 100%; height: 100%; object-fit: cover; }
+  .hero-food .hero-shade {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(42, 27, 19, .1) 0%, rgba(42, 27, 19, 0) 46%, rgba(42, 27, 19, .86) 100%);
+  }
+  .hero-food .pill { position: absolute; left: 16px; top: 16px; }
+  .hero-copy { position: absolute; left: 18px; right: 18px; bottom: 18px; }
+  .hero-title { font-size: 19px; font-weight: 800; letter-spacing: -.4px; color: #FFF6E8; text-shadow: 0 3px 12px rgba(48, 29, 20, .6); }
+  .hero-sub { margin-top: 4px; font-size: 11.5px; font-weight: 500; color: rgba(255, 255, 255, .78); }
+  .drink-float--ob { right: 20px; bottom: 2px; width: 82px; height: 82px; opacity: 1; border: 2px solid rgba(255, 252, 247, .9); }
+
+  /* menu layers */
+  .layers { position: absolute; left: 22px; top: 6px; width: 368px; height: 470px; }
+  .layer-card {
+    position: absolute; border-radius: 26px; overflow: hidden;
+    border: 3px solid #fff; box-shadow: var(--shadow-float);
+  }
+  .layer-card img { width: 100%; height: 100%; object-fit: cover; }
+  .layer-card .layer-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(42, 27, 19, 0) 55%, rgba(42, 27, 19, .7) 100%); }
+  .layer-label { position: absolute; left: 10px; right: 10px; bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .layer-label span { font-size: 11px; font-weight: 800; color: #FFF6E8; }
+  .layer-card--left { left: 6px; top: 92px; width: 168px; height: 202px; transform: rotate(-6.3deg); }
+  .layer-card--right { right: 4px; top: 64px; width: 166px; height: 200px; transform: rotate(5.7deg); }
+  .layer-card--front { left: 80px; top: 180px; width: 208px; height: 240px; }
+  .heart-badge {
+    position: absolute; left: 16px; top: 58px; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--terracotta); color: #fff; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 14px rgba(166, 93, 63, .35);
+  }
+
+  /* order phone */
+  .phone-mock {
+    position: absolute; left: 50%; top: 32px; transform: translateX(-50%);
+    width: 208px; height: 362px; padding: 6px; border-radius: 36px;
+    background: var(--espresso); box-shadow: 0 20px 34px rgba(42, 27, 19, .4);
+  }
+  .phone-screen { width: 100%; height: 100%; border-radius: 30px; overflow: hidden; background: var(--cream); display: flex; flex-direction: column; }
+  .phone-top { padding: 12px 12px 6px; display: flex; align-items: center; gap: 7px; }
+  .phone-top .title { font-size: 10.5px; font-weight: 800; color: var(--brown); }
+  .phone-top .icon { color: var(--brown); }
+  .phone-divider { height: 1px; background: var(--border); margin: 0 10px; }
+  .phone-items { padding: 8px 10px; display: flex; flex-direction: column; gap: 7px; }
+  .phone-item { display: flex; align-items: center; gap: 8px; }
+  .phone-item img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; }
+  .phone-item .info { flex: 1; }
+  .phone-item .name { font-size: 9px; font-weight: 700; color: var(--brown); }
+  .phone-item .line { margin-top: 3px; width: 52px; height: 5px; border-radius: 999px; background: var(--border); }
+  .phone-item .qty { padding: 3px 7px; border-radius: 999px; background: var(--terracotta-soft); color: var(--terracotta-dark); font-size: 8px; font-weight: 800; }
+  .phone-summary { margin: 0 10px 8px; padding: 7px 9px; border-radius: 10px; background: var(--beige-soft); }
+  .phone-row { display: flex; align-items: center; justify-content: space-between; font-size: 8px; color: var(--brown-soft); }
+  .phone-row + .phone-row { margin-top: 4px; }
+  .phone-row b { color: var(--brown); font-weight: 800; font-size: 8.5px; }
+  .phone-bar { display: block; height: 5px; border-radius: 999px; background: rgba(220, 199, 178, .7); }
+  .phone-total-line { height: 6px; width: 52px; border-radius: 999px; background: rgba(166, 93, 63, .55); display: block; }
+  .phone-checkout {
+    margin: 0 10px 12px; height: 35px; border-radius: 12px;
+    background: linear-gradient(180deg, #B96D43, #85452F);
+    color: #fff; display: flex; align-items: center; justify-content: center; gap: 5px;
+    font-size: 9.5px; font-weight: 800; box-shadow: 0 5px 10px rgba(166, 93, 63, .3);
+  }
+  .success-chip {
+    position: absolute; right: 8px; top: 4px;
+    padding: 8px 11px; border-radius: 16px;
+    background: var(--surface); border: 1px solid var(--border);
+    box-shadow: var(--shadow-float); display: flex; align-items: center; gap: 6px;
+    font-size: 9.5px; font-weight: 700; color: var(--brown);
+  }
+  .success-chip .icon { color: var(--success); }
+  .bag-float {
+    position: absolute; left: 18px; top: 58px; width: 48px; height: 48px;
+    border-radius: 15px; background: linear-gradient(135deg, #B96D43, #85452F);
+    box-shadow: var(--shadow-button); display: flex; align-items: center; justify-content: center;
+    color: #fff;
+  }
+
+  /* ---------- login ---------- */
+  .login { background: #150b05; color: var(--brown); }
+  .login-photo { position: absolute; top: -46px; left: -36px; width: 484px; height: 560px; object-fit: cover; filter: blur(12px); opacity: .6; }
+  .login-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(18, 8, 4, .9) 0%, rgba(18, 8, 4, .52) 45%, rgba(14, 6, 3, .96) 100%); }
+  .login-brand { left: 50%; top: 44px; transform: translateX(-50%); }
+  .login-tagline { left: 50%; top: 176px; transform: translateX(-50%); white-space: nowrap; }
+  .login-plate { left: 50%; top: 210px; width: 202px; height: 128px; transform: translateX(-50%); }
+  .login-card {
+    position: absolute; left: 20px; right: 20px; top: 366px;
+    border-radius: 30px; padding: 14px 22px 20px;
+    background: linear-gradient(180deg, #FFFDF9 0%, #FFF8EF 56%, #FCF2E7 100%);
+    border: 1px solid rgba(255, 255, 255, .7);
+    box-shadow: 0 22px 44px rgba(20, 10, 4, .55), 0 4px 12px rgba(20, 10, 4, .35);
+  }
+  .gloss-line { height: 1.2px; margin: 0 26px 18px; border-radius: 999px; background: linear-gradient(90deg, rgba(255,255,255,0), #fff, rgba(255,255,255,0)); }
+  .login-title { font-size: 26px; line-height: 1.12; font-weight: 800; letter-spacing: -.6px; color: var(--brown); }
+  .login-sub { margin-top: 6px; font-size: 13.5px; line-height: 1.4; font-weight: 500; color: var(--brown-soft); }
+  .login-fields { margin-top: 18px; }
+  .login-fields .label + .field { margin-bottom: 12px; }
+  .login-fields .label:last-of-type + .field { margin-bottom: 0; }
+  .remember-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+  .check-row { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--brown); }
+  .checkbox {
+    width: 20px; height: 20px; border-radius: 6px; background: var(--terracotta);
+    border: 1.4px solid var(--terracotta); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 3px 8px rgba(166, 93, 63, .28);
+  }
+  .forgot { font-size: 13px; font-weight: 700; color: var(--terracotta-dark); }
+  .login-btn { margin-top: 14px; }
+  .login-divider { margin-top: 16px; }
+  .guest-btn { margin-top: 12px; }
+  .guest-btn .icon { color: var(--terracotta-dark); }
+  .login-footer { margin-top: 12px; text-align: center; font-size: 13px; font-weight: 500; color: var(--brown-soft); }
+  .login-footer b { color: var(--terracotta-dark); font-weight: 800; margin-left: 4px; }
+
+  /* ---------- foundations ---------- */
+  .foundations { padding: 26px 24px; background: var(--cream); }
+  .fd-kicker { font-size: 9px; font-weight: 800; letter-spacing: 2px; color: var(--terracotta); }
+  .fd-title { margin-top: 4px; font-size: 24px; font-weight: 800; letter-spacing: -.7px; color: var(--brown); }
+  .fd-sub { margin-top: 3px; font-size: 10px; color: var(--brown-soft); }
+  .fd-section { margin-top: 14px; }
+  .fd-section-title { font-size: 8.5px; font-weight: 800; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin-bottom: 7px; }
+  .swatches { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .swatch { display: flex; align-items: center; gap: 8px; height: 34px; padding: 4px 7px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); }
+  .swatch i { width: 24px; height: 24px; border-radius: 7px; display: block; flex: 0 0 auto; }
+  .swatch .n { font-size: 8.5px; font-weight: 700; color: var(--brown); line-height: 1.2; }
+  .swatch .h { font-size: 7.5px; color: var(--muted); letter-spacing: .2px; }
+  .type-row { display: flex; align-items: baseline; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed var(--border); }
+  .type-row .sample { color: var(--brown); }
+  .type-row .meta-t { font-size: 8px; color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .chip { padding: 4px 7px; border-radius: 7px; background: var(--beige-soft); border: 1px solid var(--border); font-size: 8px; font-weight: 600; color: var(--brown-soft); }
+  .radii { display: flex; gap: 10px; align-items: flex-end; }
+  .radius-box { width: 42px; height: 42px; background: var(--terracotta-soft); border: 1px solid rgba(166, 93, 63, .25); }
+  .radius-label { text-align: center; font-size: 7.5px; color: var(--muted); margin-top: 3px; }
+  .shadows { display: flex; gap: 8px; }
+  .shadow-card { flex: 1; padding: 8px; border-radius: 10px; background: var(--surface); font-size: 8px; color: var(--brown-soft); text-align: center; }
+  .shadow-card b { display: block; font-size: 8.5px; color: var(--brown); margin-bottom: 3px; }
+  .motion-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+  .motion-chip { padding: 5px 6px; border-radius: 7px; background: var(--espresso); color: #F3D89B; font-size: 8px; font-weight: 700; text-align: center; }
+  .motion-chip small { display: block; color: rgba(255, 243, 222, .55); font-size: 6.5px; font-weight: 500; }
+  .fd-note { margin-top: 12px; padding: 9px 10px; border-radius: 10px; background: rgba(166, 93, 63, .08); border: 1px solid rgba(166, 93, 63, .16); font-size: 8px; line-height: 1.5; color: var(--brown-soft); }
+
+  .board-foot { width: 1324px; margin: 34px auto 0; display: flex; justify-content: space-between; font-size: 10px; color: #8E7C6E; }
+  .board-foot b { color: #C9B8A8; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <header class="board-head">
+    <div>
+      <div class="board-kicker">Import Kit · Figma</div>
+      <div class="board-title">Kedai Ummi — Splash, Onboarding &amp; Login</div>
+      <div class="board-sub">5 frame · 412 × 915 Android · Warna, font, dan foto asli project.<br/>Impor lewat plugin <b>html.to.design</b>, lalu terapkan tokens dari <b>kedai-ummi.tokens.json</b>.</div>
+    </div>
+    <div class="board-badge"><i></i> 412 × 915 · Poppins + Pacifico</div>
+  </header>
+
+  <div class="grid">
+
+    <!-- ================= 00 FOUNDATIONS ================= -->
+    <section class="cell">
+      <div class="meta"><span class="num">00</span><span class="name">Foundations</span><span class="size">412 × 915</span></div>
+      <div class="phone foundations">
+        <div class="fd-kicker">DESIGN TOKENS</div>
+        <div class="fd-title">Kedai Ummi</div>
+        <div class="fd-sub">Premium Warm Food Experience · v1.0</div>
+
+        <div class="fd-section">
+          <div class="fd-section-title">Colors</div>
+          <div class="swatches">
+            <div class="swatch"><i style="background:#A65D3F"></i><div><div class="n">Terracotta</div><div class="h">#A65D3F</div></div></div>
+            <div class="swatch"><i style="background:#85452F"></i><div><div class="n">Terracotta Dark</div><div class="h">#85452F</div></div></div>
+            <div class="swatch"><i style="background:#D6A66A"></i><div><div class="n">Muted Gold</div><div class="h">#D6A66A</div></div></div>
+            <div class="swatch"><i style="background:#2A1B13"></i><div><div class="n">Espresso</div><div class="h">#2A1B13</div></div></div>
+            <div class="swatch"><i style="background:#38251D"></i><div><div class="n">Text Dark</div><div class="h">#38251D</div></div></div>
+            <div class="swatch"><i style="background:#6B5445"></i><div><div class="n">Text Secondary</div><div class="h">#6B5445</div></div></div>
+            <div class="swatch"><i style="background:#FFF8EF;border:1px solid #EADCCB"></i><div><div class="n">Warm Cream</div><div class="h">#FFF8EF</div></div></div>
+            <div class="swatch"><i style="background:#F2E5D5"></i><div><div class="n">Soft Beige</div><div class="h">#F2E5D5</div></div></div>
+            <div class="swatch"><i style="background:#FFFCF7;border:1px solid #EADCCB"></i><div><div class="n">Warm White</div><div class="h">#FFFCF7</div></div></div>
+            <div class="swatch"><i style="background:#EADCCB"></i><div><div class="n">Border Beige</div><div class="h">#EADCCB</div></div></div>
+          </div>
+        </div>
+
+        <div class="fd-section">
+          <div class="fd-section-title">Typography · Poppins</div>
+          <div class="type-row"><div class="sample" style="font-size:20px;font-weight:800;letter-spacing:-.5px">Selamat Datang</div><div class="meta-t">26 / 800</div></div>
+          <div class="type-row"><div class="sample" style="font-size:14px;font-weight:800">Judul Seksi</div><div class="meta-t">19 / 800</div></div>
+          <div class="type-row"><div class="sample" style="font-size:11px;font-weight:500;color:#6B5445">Body copy hangat dan mudah dibaca.</div><div class="meta-t">14 / 500</div></div>
+          <div class="type-row"><div class="sample" style="font-size:8.5px;font-weight:800;letter-spacing:1.4px;color:#9B8574">LABEL KECIL</div><div class="meta-t">10.5 / 800</div></div>
+        </div>
+
+        <div class="fd-section">
+          <div class="fd-section-title">Spacing · 4 pt scale</div>
+          <div class="chips"><span class="chip">4</span><span class="chip">8</span><span class="chip">12</span><span class="chip">16</span><span class="chip">20</span><span class="chip">24</span><span class="chip">32</span><span class="chip">40</span><span class="chip">48</span><span class="chip">64</span></div>
+        </div>
+
+        <div class="fd-section">
+          <div class="fd-section-title">Radii</div>
+          <div class="radii">
+            <div><div class="radius-box" style="border-radius:16px"></div><div class="radius-label">Field 16</div></div>
+            <div><div class="radius-box" style="border-radius:20px"></div><div class="radius-label">Button 20</div></div>
+            <div><div class="radius-box" style="border-radius:24px"></div><div class="radius-label">Card 24</div></div>
+            <div><div class="radius-box" style="border-radius:30px;width:52px"></div><div class="radius-label">Login 30</div></div>
+            <div><div class="radius-box" style="border-radius:999px;width:52px"></div><div class="radius-label">Pill 999</div></div>
+          </div>
+        </div>
+
+        <div class="fd-section">
+          <div class="fd-section-title">Elevation</div>
+          <div class="shadows">
+            <div class="shadow-card" style="box-shadow:0 10px 22px rgba(56,37,29,.10)"><b>Card</b>22 px</div>
+            <div class="shadow-card" style="box-shadow:0 16px 34px rgba(56,37,29,.16)"><b>Float</b>34 px</div>
+            <div class="shadow-card" style="box-shadow:0 8px 18px rgba(166,93,63,.28)"><b>Button</b>terracotta</div>
+          </div>
+        </div>
+
+        <div class="fd-section">
+          <div class="fd-section-title">Motion</div>
+          <div class="motion-grid">
+            <div class="motion-chip">150<small>fast</small></div>
+            <div class="motion-chip">250<small>normal</small></div>
+            <div class="motion-chip">350<small>smooth</small></div>
+            <div class="motion-chip">500<small>emphasis</small></div>
+            <div class="motion-chip">2350<small>splash</small></div>
+            <div class="motion-chip">900<small>cinematic</small></div>
+          </div>
+          <div class="chips" style="margin-top:5px"><span class="chip">easeOutCubic</span><span class="chip">easeOutQuint</span><span class="chip">easeOutBack</span><span class="chip">elasticOut</span></div>
+        </div>
+
+        <div class="fd-note">Jadikan warna, teks, radius, dan shadow di frame ini sebagai <b>Figma Styles</b>. Token lengkap ada di <b>tokens/kedai-ummi.tokens.json</b>.</div>
+      </div>
+    </section>
+
+    <!-- ================= 01 SPLASH ================= -->
+    <section class="cell">
+      <div class="meta"><span class="num">01</span><span class="name">Splash</span><span class="size">412 × 915</span></div>
+      <div class="phone splash">
+        <img class="splash-photo" src="../assets/images/products/burger.jpg" alt="Burger" />
+        <div class="splash-shade"></div>
+        <div class="glow splash-glow-a"></div>
+        <div class="glow splash-glow-b"></div>
+        <div class="particle" style="left:46px;top:330px"></div>
+        <div class="particle" style="left:78px;top:212px;opacity:.35"></div>
+        <div class="particle" style="right:64px;top:352px;opacity:.45"></div>
+        <div class="particle" style="right:96px;bottom:262px;opacity:.3"></div>
+        <div class="particle" style="left:64px;bottom:330px;opacity:.35"></div>
+        <svg class="leaf" style="left:-14px;top:144px;transform:rotate(34deg)" viewBox="0 0 60 100"><path d="M30 0 C66 28 54 74 30 100 C6 74 -6 28 30 0Z" fill="#93B268"/><path d="M30 8 C35 38 35 66 30 92" fill="none" stroke="rgba(71,101,48,.55)" stroke-width="1"/></svg>
+        <svg class="leaf" style="right:-10px;bottom:190px;transform:rotate(-52deg)" viewBox="0 0 60 100"><path d="M30 0 C66 28 54 74 30 100 C6 74 -6 28 30 0Z" fill="#93B268"/><path d="M30 8 C35 38 35 66 30 92" fill="none" stroke="rgba(71,101,48,.55)" stroke-width="1"/></svg>
+
+        <div class="splash-content">
+          <div class="brand abs splash-brand">
+            <svg class="hat" viewBox="0 0 100 100"><g fill="#FFF7E6"><circle cx="30" cy="42" r="20"/><circle cx="50" cy="30" r="22"/><circle cx="70" cy="42" r="20"/><rect x="30" y="38" width="40" height="42" rx="5"/></g><rect x="32" y="61" width="36" height="19" rx="4" fill="#EFD9B8"/><path d="M33 61 H67" stroke="rgba(166,93,63,.25)" stroke-width="1.4"/><path d="M34 63 C30 52 37 47 44 49" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <div class="script"><span class="k">Kedai</span><span class="u">Ummi</span></div>
+          </div>
+          <div class="tagline-row abs splash-tagline"><i></i><span>“Lezat Setiap Gigitan”</span><i></i></div>
+          <div class="food-plate splash-plate"><img src="../assets/images/products/burger.jpg" alt="Hero burger" /></div>
+          <div class="drink-float splash-drink"><img src="../assets/images/products/es-jeruk.jpg" alt="Es jeruk" /></div>
+          <div class="loader"><svg class="hat" viewBox="0 0 100 100"><g fill="#FFF7E6"><circle cx="30" cy="42" r="20"/><circle cx="50" cy="30" r="22"/><circle cx="70" cy="42" r="20"/><rect x="30" y="38" width="40" height="42" rx="5"/></g><rect x="32" y="61" width="36" height="19" rx="4" fill="#EFD9B8"/><path d="M33 61 H67" stroke="rgba(166,93,63,.25)" stroke-width="1.4"/><path d="M34 63 C30 52 37 47 44 49" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="splash-status">Menyiapkan pengalaman terbaik…</div>
+          <div class="splash-footer">KEDAI UMMI · LEZAT SETIAP GIGITAN</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 02 ONBOARDING WELCOME ================= -->
+    <section class="cell">
+      <div class="meta"><span class="num">02</span><span class="name">Onboarding — Welcome</span><span class="size">412 × 915</span></div>
+      <div class="phone onboard">
+        <div class="glow ob-glow-a"></div><div class="glow ob-glow-b"></div>
+        <svg class="leaf" style="left:-16px;bottom:246px;transform:rotate(32deg)" viewBox="0 0 60 100"><path d="M30 0 C66 28 54 74 30 100 C6 74 -6 28 30 0Z" fill="#93B268"/><path d="M30 8 C35 38 35 66 30 92" fill="none" stroke="rgba(71,101,48,.55)" stroke-width="1"/></svg>
+        <svg class="leaf" style="right:-10px;top:150px;transform:rotate(-50deg)" viewBox="0 0 60 100"><path d="M30 0 C66 28 54 74 30 100 C6 74 -6 28 30 0Z" fill="#93B268"/><path d="M30 8 C35 38 35 66 30 92" fill="none" stroke="rgba(71,101,48,.55)" stroke-width="1"/></svg>
+
+        <header class="ob-header">
+          <div class="brand brand--sm"><svg class="hat" viewBox="0 0 100 100"><g fill="#FFF7E6"><circle cx="30" cy="42" r="20"/><circle cx="50" cy="30" r="22"/><circle cx="70" cy="42" r="20"/><rect x="30" y="38" width="40" height="42" rx="5"/></g><rect x="32" y="61" width="36" height="19" rx="4" fill="#EFD9B8"/><path d="M33 61 H67" stroke="rgba(166,93,63,.25)" stroke-width="1.4"/><path d="M34 63 C30 52 37 47 44 49" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/></svg><div class="script"><span class="k">Kedai</span><span class="u">Ummi</span></div></div>
+          <div class="ob-skip">Lewati</div>
+        </header>
+
+        <div class="ob-visual">
+          <div class="hero-food">
+            <img class="hero-photo" src="../assets/images/products/burger.jpg" alt="Burger" />
+            <div class="hero-shade"></div>
+            <div class="pill pill--glass"><svg class="hat" style="width:12px;height:12px" viewBox="0 0 100 100"><g fill="#FFF7E6"><circle cx="30" cy="42" r="20"/><circle cx="50" cy="30" r="22"/><circle cx="70" cy="42" r="20"/><rect x="30" y="38" width="40" height="42" rx="5"/></g><rect x="32" y="61" width="36" height="19" rx="4" fill="#EFD9B8"/><path d="M33 61 H67" stroke="rgba(166,93,63,.25)" stroke-width="1.4"/><path d="M34 63 C30 52 37 47 44 49" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/></svg> Kedai Ummi</div>
+            <div class="hero-copy">
+              <div class="hero-title">Lezat Setiap Gigitan</div>
+              <div class="hero-sub">Dimasak segar setiap hari</div>
+            </div>
+          </div>
+          <div class="drink-float drink-float--ob"><img src="../assets/images/products/es-jeruk.jpg" alt="Es jeruk" /></div>
+        </div>
+
+        <div class="ob-copy">
+          <div class="eyebrow">Selamat Datang</div>
+          <div class="ob-title">Selamat Datang<br/>di Kedai Ummi</div>
+          <div class="ob-desc">Nikmati berbagai hidangan lezat dengan kualitas terbaik.</div>
+        </div>
+
+        <div class="ob-footer">
+          <div class="dots"><i class="on"></i><i></i><i></i></div>
+          <div class="btn btn--primary">Selanjutnya<span class="arrow-circle"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 03 ONBOARDING MENU ================= -->
+    <section class="cell">
+      <div class="meta"><span class="num">03</span><span class="name">Onboarding — Menu</span><span class="size">412 × 915</span></div>
+      <div class="phone onboard">
+        <div class="glow ob-glow-a"></div><div class="glow ob-glow-b"></div>
+        <svg class="leaf" style="left:-14px;bottom:272px;transform:rotate(32deg)" viewBox="0 0 60 100"><path d="M30 0 C66 28 54 74 30 100 C6 74 -6 28 30 0Z" fill="#93B268"/><path d="M30 8 C35 38 35 66 30 92" fill="none" stroke="rgba(71,101,48,.55)" stroke-width="1"/></svg>
+        <svg class="leaf" style="right:-12px;top:136px;transform:rotate(-50deg)" viewBox="0 0 60 100"><path d="M30 0 C66 28 54 74 30 100 C6 74 -6 28 30 0Z" fill="#93B268"/><path d="M30 8 C35 38 35 66 30 92" fill="none" stroke="rgba(71,101,48,.55)" stroke-width="1"/></svg>
+
+        <header class="ob-header">
+          <div class="brand brand--sm"><svg class="hat" viewBox="0 0 100 100"><g fill="#FFF7E6"><circle cx="30" cy="42" r="20"/><circle cx="50" cy="30" r="22"/><circle cx="70" cy="42" r="20"/><rect x="30" y="38" width="40" height="42" rx="5"/></g><rect x="32" y="61" width="36" height="19" rx="4" fill="#EFD9B8"/><path d="M33 61 H67" stroke="rgba(166,93,63,.25)" stroke-width="1.4"/><path d="M34 63 C30 52 37 47 44 49" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/></svg><div class="script"><span class="k">Kedai</span><span class="u">Ummi</span></div></div>
+          <div class="ob-skip">Lewati</div>
+        </header>
+
+        <div class="ob-visual">
+          <div class="layers">
+            <div class="layer-card layer-card--left">
+              <img src="../assets/images/products/kebab.jpg" alt="Kebab" /><div class="layer-shade"></div>
+              <div class="layer-label"><span>Kebab</span></div>
+            </div>
+            <div class="layer-card layer-card--right">
+              <img src="../assets/images/products/mozarella.jpg" alt="Mozarella" /><div class="layer-shade"></div>
+              <div class="layer-label"><span>Mozarella</span></div>
+            </div>
+            <div class="layer-card layer-card--front">
+              <img src="../assets/images/products/burger.jpg" alt="Burger" /><div class="layer-shade"></div>
+              <div class="layer-label"><span>Burger</span><span class="pill pill--gold">Favorit</span></div>
+            </div>
+            <div class="heart-badge"><svg class="icon icon--sm" viewBox="0 0 24 24" style="fill:#fff;stroke:#fff"><path d="M12 21s-7-4.4-9.5-8.5C.6 9.4 2.2 5.5 6 5.5c2.2 0 3.8 1.2 6 3.4 2.2-2.2 3.8-3.4 6-3.4 3.8 0 5.4 3.9 3.5 7C19 16.6 12 21 12 21Z"/></svg></div>
+          </div>
+        </div>
+
+        <div class="ob-copy">
+          <div class="eyebrow">Temukan Favoritmu</div>
+          <div class="ob-title">Temukan Menu<br/>Favoritmu</div>
+          <div class="ob-desc">Beragam pilihan makanan dan minuman lezat tersedia untuk menemani harimu.</div>
+        </div>
+
+        <div class="ob-footer">
+          <div class="dots"><i></i><i class="on"></i><i></i></div>
+          <div class="btn btn--primary">Selanjutnya<span class="arrow-circle"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 04 ONBOARDING ORDER ================= -->
+    <section class="cell">
+      <div class="meta"><span class="num">04</span><span class="name">Onboarding — Order</span><span class="size">412 × 915</span></div>
+      <div class="phone onboard">
+        <div class="glow ob-glow-a"></div><div class="glow ob-glow-b"></div>
+        <svg class="leaf" style="left:-14px;bottom:272px;transform:rotate(32deg)" viewBox="0 0 60 100"><path d="M30 0 C66 28 54 74 30 100 C6 74 -6 28 30 0Z" fill="#93B268"/><path d="M30 8 C35 38 35 66 30 92" fill="none" stroke="rgba(71,101,48,.55)" stroke-width="1"/></svg>
+        <svg class="leaf" style="right:-12px;top:136px;transform:rotate(-50deg)" viewBox="0 0 60 100"><path d="M30 0 C66 28 54 74 30 100 C6 74 -6 28 30 0Z" fill="#93B268"/><path d="M30 8 C35 38 35 66 30 92" fill="none" stroke="rgba(71,101,48,.55)" stroke-width="1"/></svg>
+
+        <header class="ob-header">
+          <div class="brand brand--sm"><svg class="hat" viewBox="0 0 100 100"><g fill="#FFF7E6"><circle cx="30" cy="42" r="20"/><circle cx="50" cy="30" r="22"/><circle cx="70" cy="42" r="20"/><rect x="30" y="38" width="40" height="42" rx="5"/></g><rect x="32" y="61" width="36" height="19" rx="4" fill="#EFD9B8"/><path d="M33 61 H67" stroke="rgba(166,93,63,.25)" stroke-width="1.4"/><path d="M34 63 C30 52 37 47 44 49" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/></svg><div class="script"><span class="k">Kedai</span><span class="u">Ummi</span></div></div>
+          <div class="ob-skip">Lewati</div>
+        </header>
+
+        <div class="ob-visual">
+          <div class="success-chip"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg> Pesanan diterima</div>
+          <div class="phone-mock">
+            <div class="phone-screen">
+              <div class="phone-top">
+                <svg class="icon icon--xs" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg>
+                <div class="title" style="flex:1">Keranjang</div>
+                <svg class="icon icon--xs" viewBox="0 0 24 24" style="opacity:.5"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+              </div>
+              <div class="phone-divider"></div>
+              <div class="phone-items">
+                <div class="phone-item">
+                  <img src="../assets/images/products/burger.jpg" alt="Burger" />
+                  <div class="info"><div class="name">Burger Spesial</div><div class="line"></div></div>
+                  <div class="qty">x1</div>
+                </div>
+                <div class="phone-item">
+                  <img src="../assets/images/products/es-jeruk.jpg" alt="Es jeruk" />
+                  <div class="info"><div class="name">Es Jeruk Segar</div><div class="line"></div></div>
+                  <div class="qty">x2</div>
+                </div>
+              </div>
+              <div style="flex:1"></div>
+              <div class="phone-summary">
+                <div class="phone-row"><span>Subtotal</span><span class="phone-bar" style="width:74px"></span></div>
+                <div class="phone-row"><span>Ongkir</span><span class="phone-bar" style="width:44px"></span></div>
+                <div class="phone-row" style="margin-top:5px;padding-top:5px;border-top:1px solid var(--border)"><b>Total</b><span class="phone-total-line"></span></div>
+              </div>
+              <div class="phone-checkout">Checkout <svg class="icon icon--xs" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+            </div>
+          </div>
+          <div class="bag-float"><svg class="icon" viewBox="0 0 24 24"><path d="M6 8h12l1 12H5L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></div>
+        </div>
+
+        <div class="ob-copy">
+          <div class="eyebrow">Pesan Lebih Mudah</div>
+          <div class="ob-title">Pesan Lebih Mudah</div>
+          <div class="ob-desc">Pesan makanan favoritmu dengan cepat dan praktis.</div>
+        </div>
+
+        <div class="ob-footer">
+          <div class="dots"><i></i><i></i><i class="on"></i></div>
+          <div class="btn btn--primary">Mulai Sekarang<span class="arrow-circle"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 05 LOGIN ================= -->
+    <section class="cell">
+      <div class="meta"><span class="num">05</span><span class="name">Login</span><span class="size">412 × 915</span></div>
+      <div class="phone login">
+        <img class="login-photo" src="../assets/images/products/burger.jpg" alt="Burger" />
+        <div class="login-shade"></div>
+        <div class="glow" style="top:60px;left:50%;margin-left:-190px;width:380px;height:380px;background:radial-gradient(circle,rgba(214,166,106,.18),rgba(214,166,106,0) 70%)"></div>
+        <svg class="leaf" style="left:-18px;top:238px;transform:rotate(34deg);opacity:.18" viewBox="0 0 60 100"><path d="M30 0 C66 28 54 74 30 100 C6 74 -6 28 30 0Z" fill="#93B268"/><path d="M30 8 C35 38 35 66 30 92" fill="none" stroke="rgba(71,101,48,.55)" stroke-width="1"/></svg>
+        <svg class="leaf" style="right:-12px;bottom:96px;transform:rotate(-50deg);opacity:.12" viewBox="0 0 60 100"><path d="M30 0 C66 28 54 74 30 100 C6 74 -6 28 30 0Z" fill="#93B268"/><path d="M30 8 C35 38 35 66 30 92" fill="none" stroke="rgba(71,101,48,.55)" stroke-width="1"/></svg>
+
+        <div class="brand brand--login abs login-brand">
+          <svg class="hat" viewBox="0 0 100 100"><g fill="#FFF7E6"><circle cx="30" cy="42" r="20"/><circle cx="50" cy="30" r="22"/><circle cx="70" cy="42" r="20"/><rect x="30" y="38" width="40" height="42" rx="5"/></g><rect x="32" y="61" width="36" height="19" rx="4" fill="#EFD9B8"/><path d="M33 61 H67" stroke="rgba(166,93,63,.25)" stroke-width="1.4"/><path d="M34 63 C30 52 37 47 44 49" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <div class="script"><span class="k">Kedai</span><span class="u">Ummi</span></div>
+        </div>
+        <div class="tagline-row abs login-tagline"><i></i><span>“Lezat Setiap Gigitan”</span><i></i></div>
+        <div class="food-plate login-plate"><img src="../assets/images/products/burger.jpg" alt="Hero burger" /></div>
+
+        <div class="login-card">
+          <div class="gloss-line"></div>
+          <div class="login-title">Selamat Datang 👋</div>
+          <div class="login-sub">Masuk untuk melanjutkan pesanan Anda</div>
+
+          <div class="login-fields">
+            <div class="label">Email atau Nomor Telepon</div>
+            <div class="field"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M4 7l8 6 8-6"/></svg>Masukkan email atau nomor telepon</div>
+            <div class="label">Kata Sandi</div>
+            <div class="field field--focus"><svg class="icon" style="color:#A65D3F" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Masukkan kata sandi<span class="field__eye"><svg class="icon" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.6"/></svg></span></div>
+          </div>
+
+          <div class="remember-row">
+            <div class="check-row"><span class="checkbox"><svg class="icon icon--xs" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>Ingat Saya</div>
+            <div class="forgot">Lupa Kata Sandi?</div>
+          </div>
+
+          <div class="btn btn--primary login-btn">Masuk<span class="arrow-circle"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></div>
+          <div class="divider-label login-divider">Atau masuk dengan</div>
+          <div class="btn btn--secondary guest-btn"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>Masuk sebagai tamu</div>
+          <div class="login-footer">Belum memiliki akun?<b>Daftar Sekarang</b></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="board-foot">
+    <div><b>Kedai Ummi</b> · Ultra Premium Motion &amp; Food Experience</div>
+    <div>Frame 412 × 915 · 5 screen · dibuat dari token &amp; aset project Flutter</div>
+  </footer>
+</div>
+
+</body>
+</html>
